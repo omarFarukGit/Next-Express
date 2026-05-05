@@ -3,6 +3,7 @@ import "dotenv/config";
 import cors from "cors";
 const app = express();
 const port = process.env.PORT || 3000;
+app.use(express.json());
 app.use(cors());
 
 app.get("/users", (req, res) => {
@@ -21,7 +22,10 @@ const users = [
 ];
 
 app.post("/user", (req, res) => {
-  res.json({
+  const { newUser } = req.body;
+  newUser.id = users.length + 1;
+  users.push(newUser);
+  res.status(201).send({
     success: true,
     message: "user created succefully",
     users: users,
